@@ -31,7 +31,9 @@ export const useSigninForm = ({ navigate, userType }: {navigate: NavigateFunctio
 
     const handleSubmit = async () => {
         if (postInputs.email && postInputs.password && !emailError && !passwordError) {
-            // navigate(`/dashboard/${userType === 'Individual' ? 'user' : 'org'}`);
+            localStorage.setItem("token", "Bearer");
+            localStorage.setItem("userType", userType);
+            navigate(`/dashboard/${userType === 'Individual' ? 'user' : 'org'}`);
             setIsSubmitting(true);
         }
     };
@@ -97,6 +99,9 @@ export const useSignupForm = ({ navigate, userType }: {navigate: NavigateFunctio
                 setErrorMessage('Enter all fields');
                 return;
             }
+            localStorage.setItem("token", "Bearer");
+            localStorage.setItem("userType", userType);
+            navigate(`/dashboard/${userType === 'Organisation' ? 'org' : 'user'}`);
             setIsSubmitting(true);
         }
     };

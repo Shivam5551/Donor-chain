@@ -22,7 +22,7 @@ function App () {
         <Route path="/donate" element={<DonateNow/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/upload/docs" element={<UploadDocuments/>}/>
-        <Route path="" element={<Home/>}/>
+        <Route path="/" element={<Home/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>
     </BrowserRouter>

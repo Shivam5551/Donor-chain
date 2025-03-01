@@ -1,4 +1,5 @@
 import Web3 from "web3";
+import { SquareupContract_ABI, SquareupContract_Address } from "./SquareContract";
 
 declare global {
   interface Window {
@@ -8,6 +9,8 @@ declare global {
 
 // Updated contract address
 export const CONTRACT_ADDRESS = "0x7114FcE3F0385731D814C7962B82459C198A4096";
+
+
 
 // Updated ABI from the provided key
 const CONTRACT_ABI = [
@@ -147,7 +150,7 @@ export async function getContractBalance(): Promise<string> {
 
   try {
     const web3 = new Web3(window.ethereum);
-    const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+    const contract = new web3.eth.Contract(CONTRACT_ABI, SquareupContract_Address);
     const balance: string = await contract.methods.getContractBalance().call();
     return web3.utils.fromWei(balance, "ether");
   } catch (error) {

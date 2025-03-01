@@ -14,10 +14,7 @@ export const UserDashboard = () => {
   const [donated] = useState<number>(25); // Example donated amount
   const remaining = goal - donated > 0 ? goal - donated : 0;
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  if(!token) {
-    navigate('/signin')
-  }
+  
   const data = [
     { name: "Donated", value: donated, color: "#4CAF50" },
     { name: "Remaining", value: remaining, color: "#F44336" },
@@ -39,9 +36,6 @@ export const UserDashboard = () => {
     navigate('/upload/docs')
   };
 
-  if(!token) {
-    return (<Loading/>)
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">

@@ -1,23 +1,31 @@
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useWallet } from "../hooks/use-wallet";
+// import { useSquareup } from "../hooks/use-squareup";
 import { sendDonation } from "../utils/web3";
-import { Appbar } from "../components/Appbar.tsx";
+import { prepareContractCall, ThirdwebContract } from "thirdweb";
+import { useSendTransaction } from "thirdweb/react";
+import { Appbar } from "../components/Appbar";
 import { Footer } from "../components/Footer";
-import { generateCoupon, getAchievements } from "../utils/rewards.ts";
+import { generateCoupon, getAchievements } from "../utils/rewards";
 import axios from "axios";
+import { SquareupContract_ABI, SquareupContract_Address } from "../utils/SquareContract";
 
 export const DonateNow: React.FC = () => {
   const [searchParams] = useSearchParams();
   const receiver = searchParams.get("receiver");
   const { walletAddress, handleConnect } = useWallet();
+  // const { storePayment, getTotalPayments } = useSquareup();
+  const { mutate: sendTransaction } = useSendTransaction();
 
+  // State variables
   const [amount, setAmount] = useState<string>("1");
   const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [coupon, setCoupon] = useState<string | null>(null);
   const [achievements, setAchievements] = useState<string[]>([]);
+
   console.log(status, coupon, achievements);
 
   const validateInput = () => {
@@ -56,6 +64,9 @@ export const DonateNow: React.FC = () => {
       setCoupon(newCoupon);
       setAchievements(newAchievements);
 
+      // Ensure storePayment function is properly defined or imported
+      // await storePayment(walletAddress!, txHash, Number(amount), 100, 100 - Number(amount), "ETH", "v1");
+
       setAmount("1");
       setMessage("");
     } catch (error: any) {
@@ -69,18 +80,21 @@ export const DonateNow: React.FC = () => {
     try {
       const sourceId = "Source-id"; // Replace with actual payment source ID
       const currency = "USD";
-
+  
       const response = await axios.post("http://localhost:3000/api/v1/payment/pay", {
         sourceId,
         amount,
         currency,
       });
-
+  
       const data = await response.data;
       console.log(data);
-
+  
       if (data.success) {
         setStatus({ type: "success", message: `Payment Successful! Transaction ID: ${data.payment.id}` });
+  
+        // Call onClick with transaction details
+        onClick(data.payment.id, Number(amount), "ETH");
       } else {
         setStatus({ type: "error", message: "Payment Failed!" });
       }
@@ -89,17 +103,40 @@ export const DonateNow: React.FC = () => {
       setStatus({ type: "error", message: `Error: ${error.message}` });
     }
   };
+  
+
+  const onClick = (transactionId: string, amount: number, currency: string) => {
+    if (!validateInput()) return;
+
+    // Define the contract and parameters before using them
+    const contract = new ThirdwebContract(SquareupContract_Address, SquareupContract_ABI); // Replace with actual contract address and ABI
+    const _transactionId = transactionId;
+    const _amount = amount;
+    const _goal = 100;
+    const _remainingbalance = 100 - _amount;
+    const _currency = "ETH";
+    const _versiontoken = "v1";
+
+    const transaction = prepareContractCall({
+      contract,
+      method:
+        "function storePayment(string _transactionId, uint256 _amount, uint256 _goal, uint256 _remainingbalance, string _currency, string _versiontoken)",
+      params: [_transactionId, _amount, _goal, _remainingbalance, _currency, _versiontoken],
+    });
+
+    sendTransaction(transaction);
+  };
 
   return (
     <div className="bg-white text-black min-h-screen flex flex-col">
       <Appbar />
-      <div className="flex-1 mt-20 flex flex-col items-center justify-center p-6">
+      <div className="flex-1 mt-20 flex grid-cols-1 lg:grid-cols-2 flex-col items-center justify-center p-6">
         <h1 className="text-3xl font-bold mb-4">Donate to Charity</h1>
         <p className="text-gray-500 mb-6 text-center max-w-md">
           Your contribution supports impactful causes. Every transaction is secured and transparent on the blockchain.
         </p>
 
-        <div className="grid grid-cols-1 gap-6 w-full max-w-lg ">
+        <div className="grid grid-cols-1 gap-6 w-full max-w-lg">
           <div className="p-6 bg-gray-100 shadow-lg rounded-xl w-full">
             {receiver && (
               <p className="text-gray-600 mb-4">
@@ -130,14 +167,14 @@ export const DonateNow: React.FC = () => {
               </button>
             ) : (
               <>
-
                 <button
                   onClick={handleDonate}
                   disabled={loading || Number(amount) <= 0.001}
-                  className={`w-full px-6 py-3 rounded-lg font-semibold transition duration-200 ${loading || Number(amount) <= 0.001
-                    ? "bg-gray-500 cursor-not-allowed"
-                    : "bg-green-600 hover:bg-green-700"
-                    }`}
+                  className={`w-full px-6 py-3 rounded-lg font-semibold transition duration-200 ${
+                    loading || Number(amount) <= 0.001
+                      ? "bg-gray-500 cursor-not-allowed"
+                      : "bg-green-600 hover:bg-green-700"
+                  }`}
                 >
                   {loading ? "Processing..." : "Pay Using ETH"}
                 </button>
@@ -149,7 +186,6 @@ export const DonateNow: React.FC = () => {
             >
               Pay Using Payment Gateway
             </button>
-
           </div>
         </div>
       </div>

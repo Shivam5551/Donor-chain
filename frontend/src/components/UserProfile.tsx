@@ -14,7 +14,7 @@ export const UserProfile = () => {
 
       {/* User Info */}
       <div className="text-lg font-semibold text-gray-800">
-        <div className="mb-1 flex items-center"><SubHeading title="Name: "/><span className="font-normal text-gray-700">One Love</span></div>
+        <div className="mb-1 flex items-center"><SubHeading title="Name: "/><span className="font-normal text-gray-700">Dev Sharma</span></div>
         <div className="text-sm text-gray-600 overflow-hidden truncate max-w-[70dvw]">
           <span className="flex items-center"><SubHeading title="Wallet Address: "/>
           <span className="font-medium text-gray-900">

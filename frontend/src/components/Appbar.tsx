@@ -7,22 +7,25 @@ import { useLogoutHandler } from "../hooks/use-logout";
 import { useLoginHandler } from "../hooks/use-login";
 import { ShowErrorMessage } from "./ShowMessage";
 
+let userLogin = false;
+userLogin = localStorage.getItem("token") ? true : false;
+
 export const Appbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null!);
     const handleLogout = useLogoutHandler();
     
-const [userLogin, setUserLogin] = useState(false);
-const token = localStorage.getItem("token");
-const navigate = useNavigate();
 
-useEffect(() => {
-    if (token) {
-        setUserLogin(true);
-    } else {
-        navigate("/signin");
-    }
-}, [token, navigate]);
+// const token = localStorage.getItem("token");
+// const navigate = useNavigate();
+
+// useEffect(() => {
+//     if (token) {
+//         setUserLogin(true);
+//     } else {
+//         navigate("/signin");
+//     }
+// }, [token, navigate]);
 
     useMenu(setIsOpen, menuRef);
     const { walletAddress, isConnecting, handleConnect, errorMessage, setErrorMessage } = useWallet();
