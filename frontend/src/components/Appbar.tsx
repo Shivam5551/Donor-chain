@@ -67,7 +67,7 @@ export const Appbar = () => {
                     </button>
                 )}
 
-                {userLogin ? (isOpen ? <Button onClick={handleLogout} bg="bg-red-500 text-white hover:bg-red-600" >Log out</Button> : <LogoutButton />) : <Button onClick={handleLogin} bg="bg-green-500 hover:text-white hover:bg-green-700">Login</Button>}
+                {userLogin ? (isOpen ? <Button onClick={handleLogout} bg="bg-red-500 text-white hover:bg-red-600" >Log out</Button> : <LogoutButton />) : <Button onClick={handleLogin} bg="bg-green-500 text-white hover:bg-green-700">Login</Button>}
             </div>
 
             {/* Mobile Menu Button */}
