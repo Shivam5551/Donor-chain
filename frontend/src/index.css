@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@keyframes slide-in {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+
+.animate-scroll {
+  display: flex;
+  animation: scrollImages 20s linear infinite;
+}
+
+
+.animate-slide-in {
+    animation: slide-in 0.3s ease-out;
+}
+
+
+@keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+}
+  
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-animation 3s ease infinite;
+}
+
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  animation: scroll 10s linear infinite;
+}
