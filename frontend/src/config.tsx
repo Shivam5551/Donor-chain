@@ -1,1 +1,1 @@
-export const apiUrl = 'http://localhost:3000/api/v1';
+export const apiUrl = 'https://donor-chain-6g74.vercel.app/api/v1';
