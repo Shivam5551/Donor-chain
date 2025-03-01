@@ -7,6 +7,7 @@ import { getContractBalance } from "../utils/web3";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { OrgProfile } from "../components/OrgProfile";
+import { Loading } from "../components/Loading";
 
 export const OrgDashboard = () => {
   const [contractBalance, setContractBalance] = useState<number>(0);
@@ -33,6 +34,10 @@ export const OrgDashboard = () => {
   };
 
   const data = [{ name: "Available Funds", value: contractBalance, color: "#4CAF50" }];
+
+  if(!token) {
+      return (<Loading/>)
+    }
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">

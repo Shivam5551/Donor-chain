@@ -7,6 +7,7 @@ import { UserProfile } from "../components/UserProfile";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { Achievements } from "../components/Achievements.tsx";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../components/Loading.tsx";
 
 export const UserDashboard = () => {
   const [goal, setGoal] = useState<number>(100); // Default goal: 100 ETH
@@ -37,6 +38,10 @@ export const UserDashboard = () => {
   const handleRaiseFund = () => {
     navigate('/upload/docs')
   };
+
+  if(!token) {
+    return (<Loading/>)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
