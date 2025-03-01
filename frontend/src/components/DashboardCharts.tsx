@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, XAxis, YAxis, LineChart, Line } from "recharts";
 
 // Dummy data for different time ranges
-const lineDataSets = {
+const lineDataSets: { [key: string]: { day?: string; week?: string; month?: string; donations: number }[] } = {
   "Last 7 days": [
     { day: "Mon", donations: 5000 },
     { day: "Tue", donations: 7000 },
@@ -46,7 +46,7 @@ const pieData = [
 const colors = ["#4CAF50", "#2196F3", "#FFC107", "#9C27B0", "#E91E63"];
 
 export function DashboardCharts() {
-  const [selectedRange, setSelectedRange] = useState("Last 7 days");
+  const [selectedRange, setSelectedRange] = useState<"Last 7 days" | "Last 1 month" | "Last 1 year">("Last 7 days");
 
   return (
     <div className="grid rounded-2xl grid-cols-1 gap-8 p-2 sm:p-8 bg-gray-50">
@@ -61,7 +61,7 @@ export function DashboardCharts() {
             <select
               className="px-4 py-2 border border-gray-300 rounded-md"
               value={selectedRange}
-              onChange={(e) => setSelectedRange(e.target.value)}
+              onChange={(e) => setSelectedRange(e.target.value as "Last 7 days" | "Last 1 month" | "Last 1 year")}
             >
               <option>Last 7 days</option>
               <option>Last 1 month</option>

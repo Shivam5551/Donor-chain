@@ -2,8 +2,6 @@ import { Link } from "react-router-dom";
 import { MobileSocials } from "./MobileSocials";
 import Socials from "./Socials";
 
-import { Link2 } from "lucide-react";
-
 export const Footer = () => {
   return (
     <footer className="border-t bg-muted/50">

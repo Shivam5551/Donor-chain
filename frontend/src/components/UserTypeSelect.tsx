@@ -1,4 +1,4 @@
-import React, { use } from 'react';
+import React from 'react';
 import { RadioLabel } from './RadioLabel';
 
 export const UserType = ({
