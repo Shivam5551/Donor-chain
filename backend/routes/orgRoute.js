@@ -19,7 +19,7 @@ orgRouter.post('/signup', async (req, res) => {
             data: { charityName, email, password: hashedPassword, state, charityId, charitySector }
         });
 
-        res.status(201).json({ message: 'Organization registered successfully' });
+        res.status(201).json({ success: true, message: 'Organization registered successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
@@ -36,7 +36,7 @@ orgRouter.post('/signin', async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
         const token = jwt.sign({ orgId: org.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token, org: { id: org.id, charityName: org.charityName, email: org.email, isVerified: org.isVerified } });
+        res.json({ success: true, token, org: { id: org.id, charityName: org.charityName, email: org.email, isVerified: org.isVerified } });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
     }
