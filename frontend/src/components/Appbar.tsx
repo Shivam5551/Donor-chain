@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMenu } from "../hooks/use-menu";
 import { useWallet } from "../hooks/use-wallet";
 import { LogoutButton } from "./Logout";
@@ -7,13 +7,19 @@ import { useLogoutHandler } from "../hooks/use-logout";
 import { useLoginHandler } from "../hooks/use-login";
 import { ShowErrorMessage } from "./ShowMessage";
 
-let userLogin = true;
-// userLogin = false;
-
 export const Appbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null!);
     const handleLogout = useLogoutHandler();
+    const [userLogin, setUserLogin] = useState(false);
+    const token = localStorage.getItem("token");
+    const navigate = useNavigate();
+    if (token) {
+        setUserLogin(true);
+    }
+    else {
+        navigate("/signin");
+    }
 
     useMenu(setIsOpen, menuRef);
     const { walletAddress, isConnecting, handleConnect, errorMessage, setErrorMessage } = useWallet();
